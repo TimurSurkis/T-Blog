@@ -34,15 +34,6 @@ app.use('/api/user', router);
 	try {
 		await sequelize.sync();
 
-		const [user] = await User.findOrCreate({
-			where: { id: 1 },
-			defaults: {
-				name: 'Sitpot',
-				email: 'surkis.timur@gmail.com',
-				password: 'Kiev2009!',
-			},
-		});
-
 		const PORT = 3001;
 		app.listen(PORT, 'localhost', () => {
 			console.log(`Server is running on port ${PORT}`);

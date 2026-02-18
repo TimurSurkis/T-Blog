@@ -1,4 +1,4 @@
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUser, logoutUser } from '../store/slices/userSlice';
 import { useEffect } from 'react';
@@ -19,24 +19,22 @@ const Menu = () => {
 	return (
 		<>
 			<nav className="menu">
-				<Link to="/">
-					<button className="btn__menu">Home</button>
-				</Link>
+				<NavLink to="/" className="menu__link">
+					Home
+				</NavLink>
 
 				{currentUser ? (
-					<Link to="/">
-						<button onClick={handleLogout} className="btn__menu">
-							Logout
-						</button>
-					</Link>
+					<NavLink to="/" className="menu__link" onClick={handleLogout}>
+						Logout
+					</NavLink>
 				) : (
 					<div className="menu__right">
-						<Link to="/login">
-							<button className="btn__menu">Login</button>
-						</Link>
-						<Link to="/register">
-							<button className="btn__menu">Register</button>
-						</Link>
+						<NavLink to="/login" className="menu__link">
+							Login
+						</NavLink>
+						<NavLink to="/register" className="menu__link menu__link--accent">
+							Register
+						</NavLink>
 					</div>
 				)}
 			</nav>

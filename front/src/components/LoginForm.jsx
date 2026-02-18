@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { loginUser } from '../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
+import './AuthForms.css';
 
 const LoginForm = () => {
 	const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const LoginForm = () => {
 			if (result.success) {
 				navigate('/');
 			} else {
-				setError(result.error);
+				setError(result.message);
 			}
 		} catch (err) {
 			console.error(`Login failed: ${err}`);
@@ -30,33 +31,49 @@ const LoginForm = () => {
 	};
 
 	return (
-		<form
-			action="/login"
-			className="form__register"
-			method="POST"
-			onSubmit={handleLogin}
-		>
-			<label htmlFor="username">Username</label>
-			<input
-				type="username"
-				name="username"
-				value={formData.username}
-				onChange={(e) => {
-					setFormData({ ...formData, username: e.target.value });
-				}}
-			/>
-			<label htmlFor="password">Password</label>
-			<input
-				type="password"
-				name="password"
-				value={formData.password}
-				onChange={(e) => {
-					setFormData({ ...formData, password: e.target.value });
-				}}
-			/>
-			<button type="submit">Login</button>
-			{error && <p>{error}</p>}
-		</form>
+		<div className="auth-container">
+			<form className="auth-form" onSubmit={handleLogin}>
+				<h2 className="auth-form__title">Login</h2>
+
+				<div className="auth-form__group">
+					<label htmlFor="username" className="auth-form__label">
+						Username
+					</label>
+					<input
+						className="auth-form__input"
+						type="text"
+						name="username"
+						id="username"
+						value={formData.username}
+						onChange={(e) =>
+							setFormData({ ...formData, username: e.target.value })
+						}
+					/>
+				</div>
+
+				<div className="auth-form__group">
+					<label htmlFor="password" className="auth-form__label">
+						Password
+					</label>
+					<input
+						className="auth-form__input"
+						type="password"
+						name="password"
+						id="password"
+						value={formData.password}
+						onChange={(e) =>
+							setFormData({ ...formData, password: e.target.value })
+						}
+					/>
+				</div>
+
+				<button type="submit" className="auth-form__button">
+					Login
+				</button>
+
+				{error && <p className="auth-form__error">{error}</p>}
+			</form>
+		</div>
 	);
 };
 

@@ -10,7 +10,7 @@ export const fetchUser = createAsyncThunk(
 
 			if (!response.ok) {
 				const err = await response.json();
-				return rejectWithValue(err.error || 'Loading error');
+				return rejectWithValue(err.message || 'Loading error');
 			}
 
 			const data = await response.json();
@@ -28,7 +28,7 @@ export const logoutUser = createAsyncThunk(
 			const response = await fetch(`${API_URL}/logout`);
 			if (!response.ok) {
 				const err = await response.json();
-				return rejectWithValue(err.error || 'Loading error');
+				return rejectWithValue(err.message || 'Loading error');
 			}
 			const result = await response.json();
 			if (result.success) {
@@ -55,7 +55,33 @@ export const loginUser = createAsyncThunk(
 
 			if (!response.ok) {
 				const err = await response.json();
-				return rejectWithValue(err.error);
+				return rejectWithValue(err.message);
+			}
+
+			const result = await response.json();
+			console.log(result);
+			return result;
+		} catch (err) {
+			return rejectWithValue(err.message);
+		}
+	},
+);
+
+export const registerUser = createAsyncThunk(
+	'users/register',
+	async (credentials, { rejectWithValue }) => {
+		try {
+			const response = await fetch(`${API_URL}/register`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(credentials),
+			});
+
+			if (!response.ok) {
+				const err = await response.json();
+				return rejectWithValue(err.message);
 			}
 
 			const result = await response.json();
@@ -73,6 +99,7 @@ const initialState = {
 	loading: {
 		fetch: false,
 		fetchOne: false,
+		register: false,
 		login: false,
 		logout: false,
 	},
@@ -125,7 +152,7 @@ const usersSlice = createSlice({
 			})
 			.addCase(logoutUser.rejected, (state, action) => {
 				state.loading.logout = false;
-				state.error = action.payload.error;
+				state.error = action.payload.message;
 			})
 
 			// Login User
@@ -139,8 +166,22 @@ const usersSlice = createSlice({
 			})
 			.addCase(loginUser.rejected, (state, action) => {
 				state.loading.login = false;
-				state.error = action.payload.error;
+				state.error = action.payload.message;
 				console.log(state.error);
+			})
+
+			// Register User
+			.addCase(registerUser.pending, (state) => {
+				state.loading.register = true;
+				state.error = null;
+			})
+			.addCase(registerUser.fulfilled, (state, action) => {
+				state.loading.register = false;
+				state.currentUser = action.payload.user;
+			})
+			.addCase(registerUser.rejected, (state, action) => {
+				state.loading.register = false;
+				state.error = action.payload.message;
 			});
 	},
 });
