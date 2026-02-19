@@ -23,6 +23,7 @@ const LoginForm = () => {
 				navigate('/');
 			} else {
 				setError(result.message);
+				setFormData(result.formData);
 			}
 		} catch (err) {
 			console.error(`Login failed: ${err}`);
@@ -46,7 +47,10 @@ const LoginForm = () => {
 						id="username"
 						value={formData.username}
 						onChange={(e) =>
-							setFormData({ ...formData, username: e.target.value })
+							setFormData({
+								...formData,
+								username: e.target.value,
+							})
 						}
 					/>
 				</div>
@@ -62,7 +66,10 @@ const LoginForm = () => {
 						id="password"
 						value={formData.password}
 						onChange={(e) =>
-							setFormData({ ...formData, password: e.target.value })
+							setFormData({
+								...formData,
+								password: e.target.value,
+							})
 						}
 					/>
 				</div>

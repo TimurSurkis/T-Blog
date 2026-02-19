@@ -61,7 +61,14 @@ router.post('/login', async (req, res, next) => {
 		}
 		const passwordMatch = await bcrypt.compare(password, user.password);
 		if (!passwordMatch) {
-			res.json({ success: false, message: 'Wrong password!' });
+			res.json({
+				success: false,
+				message: 'Wrong password!',
+				formData: {
+					username,
+					password: '',
+				},
+			});
 		}
 		req.user = user;
 		console.log('USER', req.user);
