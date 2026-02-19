@@ -1,9 +1,9 @@
 .auth-container {
-	min-height: 100vh;
+	height: calc(100dvh - 3rem);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 0.833rem;
+	padding: 0 0.8rem;
 }
 
 .auth-form {
@@ -113,6 +113,53 @@
 	color: #fdba74;
 	font-size: 0.542rem;
 	text-align: center;
+}
+
+.user-info {
+	background-color: #1a1a1a;
+	border: 0.042rem solid rgba(255, 255, 255, 0.1);
+	border-radius: 0.5rem;
+	padding: 1.667rem;
+	width: 100%;
+	max-width: 17.5rem;
+	box-shadow: 0 0.333rem 1.333rem rgba(0, 0, 0, 0.4);
+	margin-bottom: 5rem;
+}
+
+.user-info__title {
+	margin: 0 0 1.333rem 0;
+	font-size: 1.167rem;
+	font-weight: 600;
+	text-align: center;
+	color: rgba(255, 255, 255, 0.95);
+}
+
+.user-info__field {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 1rem;
+	padding: 0.667rem 0;
+	border-bottom: 0.042rem solid rgba(255, 255, 255, 0.08);
+}
+
+.user-info__field:last-child {
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+.user-info__label {
+	font-size: 0.583rem;
+	font-weight: 500;
+	color: rgba(255, 255, 255, 0.5);
+	flex-shrink: 0;
+}
+
+.user-info__value {
+	font-size: 0.625rem;
+	color: rgba(255, 255, 255, 0.87);
+	text-align: right;
+	word-break: break-all;
 }
 
 @media (max-width: 30rem) {

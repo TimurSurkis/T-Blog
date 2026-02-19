@@ -13,21 +13,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-/* let setUserOnStart = false;
-app.use('/', async (req, res, next) => {
-	if (!setUserOnStart) {
-		try {
-			const user = await User.findByPk(1);
-			req.user = user;
-			console.log(`The user is: ${req.user}`);
-			setUserOnStart = true;
-		} catch (err) {
-			console.log(err);
-		}
-	}
-	next();
-}); */
-
 app.use('/api/user', router);
 
 (async () => {

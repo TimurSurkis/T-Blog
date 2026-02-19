@@ -43,7 +43,7 @@ router.post('/register', async (req, res, next) => {
 		};
 		const newUser = await User.create(newUserData);
 		req.user = newUser;
-		res.json({ success: true, user: req.user });
+		res.json({ success: true, user: newUser });
 	} catch (err) {
 		console.log(err);
 		res.json({ success: false, message: err });
@@ -67,7 +67,6 @@ router.post('/login', async (req, res, next) => {
 		console.log('USER', req.user);
 		res.json({
 			success: true,
-			message: 'Logged in user!',
 			user: req.user,
 		});
 	} catch (err) {

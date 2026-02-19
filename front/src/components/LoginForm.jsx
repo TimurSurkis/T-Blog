@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import './AuthForms.css';
+import { useAuth } from '../hooks/useAuth';
 
 const LoginForm = () => {
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const auth = useAuth();
 
 	const [formData, setFormData] = useState({
 		username: '',
@@ -18,7 +17,7 @@ const LoginForm = () => {
 		e.preventDefault();
 
 		try {
-			const result = await dispatch(loginUser(formData)).unwrap();
+			const result = await auth.login(formData);
 
 			if (result.success) {
 				navigate('/');
@@ -27,6 +26,7 @@ const LoginForm = () => {
 			}
 		} catch (err) {
 			console.error(`Login failed: ${err}`);
+			setError(err);
 		}
 	};
 

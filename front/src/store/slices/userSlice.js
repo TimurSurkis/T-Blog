@@ -103,19 +103,15 @@ const initialState = {
 		login: false,
 		logout: false,
 	},
-	error: null,
 };
 
 const usersSlice = createSlice({
-	name: 'posts',
+	name: 'users',
 	initialState,
 
 	reducers: {
 		clearCurrentUser: (state) => {
 			state.currentUser = null;
-		},
-		clearError: (state) => {
-			state.error = null;
 		},
 		setCurrentUser: (state, action) => {
 			const user = state.items.find((item) => item.id === action.payload);
@@ -130,7 +126,6 @@ const usersSlice = createSlice({
 			// Fetch User
 			.addCase(fetchUser.pending, (state) => {
 				state.loading.fetchOne = true;
-				state.error = null;
 			})
 			.addCase(fetchUser.fulfilled, (state, action) => {
 				state.loading.fetchOne = false;
@@ -138,13 +133,11 @@ const usersSlice = createSlice({
 			})
 			.addCase(fetchUser.rejected, (state, action) => {
 				state.loading.fetchOne = false;
-				state.error = action.payload || 'Error loading user';
 			})
 
 			// Logout User
 			.addCase(logoutUser.pending, (state) => {
 				state.loading.logout = true;
-				state.error = null;
 			})
 			.addCase(logoutUser.fulfilled, (state, action) => {
 				state.loading.logout = false;
@@ -152,13 +145,11 @@ const usersSlice = createSlice({
 			})
 			.addCase(logoutUser.rejected, (state, action) => {
 				state.loading.logout = false;
-				state.error = action.payload.message;
 			})
 
 			// Login User
 			.addCase(loginUser.pending, (state) => {
 				state.loading.login = true;
-				state.error = null;
 			})
 			.addCase(loginUser.fulfilled, (state, action) => {
 				state.loading.login = false;
@@ -166,14 +157,12 @@ const usersSlice = createSlice({
 			})
 			.addCase(loginUser.rejected, (state, action) => {
 				state.loading.login = false;
-				state.error = action.payload.message;
 				console.log(state.error);
 			})
 
 			// Register User
 			.addCase(registerUser.pending, (state) => {
 				state.loading.register = true;
-				state.error = null;
 			})
 			.addCase(registerUser.fulfilled, (state, action) => {
 				state.loading.register = false;
@@ -181,11 +170,12 @@ const usersSlice = createSlice({
 			})
 			.addCase(registerUser.rejected, (state, action) => {
 				state.loading.register = false;
-				state.error = action.payload.message;
 			});
 	},
 });
 
-export const { clearCurrentUser, clearError, setCurrentUser } =
-	usersSlice.actions;
+export const { clearCurrentUser, setCurrentUser } = usersSlice.actions;
+
+export const selectCurrentUser = (state) => state.users.currentUser;
+
 export default usersSlice.reducer;

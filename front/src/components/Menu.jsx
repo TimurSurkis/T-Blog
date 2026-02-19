@@ -1,20 +1,16 @@
 import { Outlet, NavLink } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchUser, logoutUser } from '../store/slices/userSlice';
-import { useEffect } from 'react';
+import { useCurrentUser } from '../hooks/useCurrentUser';
+import { useAuth } from '../hooks/useAuth';
 
 const Menu = () => {
-	const dispatch = useDispatch();
+	const currentUser = useCurrentUser();
+	const auth = useAuth();
 
-	const currentUser = useSelector((state) => state.users.currentUser);
+	const { name } = currentUser ?? {};
 
 	const handleLogout = () => {
-		dispatch(logoutUser());
+		auth.logout();
 	};
-
-	useEffect(() => {
-		dispatch(fetchUser());
-	}, [dispatch, currentUser]);
 
 	return (
 		<>
@@ -24,15 +20,23 @@ const Menu = () => {
 				</NavLink>
 
 				{currentUser ? (
-					<NavLink to="/" className="menu__link" onClick={handleLogout}>
-						Logout
-					</NavLink>
+					<div>
+						<button className="menu__link" onClick={handleLogout}>
+							Logout
+						</button>
+						<NavLink to="/user-info" className="menu__link">
+							{name}
+						</NavLink>
+					</div>
 				) : (
 					<div className="menu__right">
 						<NavLink to="/login" className="menu__link">
 							Login
 						</NavLink>
-						<NavLink to="/register" className="menu__link menu__link--accent">
+						<NavLink
+							to="/register"
+							className="menu__link menu__link--accent"
+						>
 							Register
 						</NavLink>
 					</div>

@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../store/slices/userSlice';
 import './AuthForms.css';
+import { useAuth } from '../hooks/useAuth';
 
 const RegisterForm = () => {
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const auth = useAuth();
 
 	const [password, setPassword] = useState('');
 	const [repeatPassword, setRepeatPassword] = useState('');
@@ -21,7 +20,7 @@ const RegisterForm = () => {
 		e.preventDefault();
 
 		try {
-			const result = await dispatch(registerUser(formData)).unwrap();
+			const result = await auth.register(formData);
 
 			if (result.success) {
 				navigate('/');
