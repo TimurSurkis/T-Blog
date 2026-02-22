@@ -6,6 +6,8 @@ const Menu = () => {
 	const currentUser = useCurrentUser();
 	const auth = useAuth();
 
+	console.log(currentUser);
+
 	const { name } = currentUser ?? {};
 
 	const handleLogout = () => {

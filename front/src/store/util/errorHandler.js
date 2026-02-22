@@ -2,7 +2,7 @@ export const handleError = (error) => {
 	console.log(`Error caught in thunk: ${error}`);
 
 	if (error instanceof Error) {
-		if (error.name === 'TypeError') {
+		if (error.name === 'TypeError' && error.message.includes('fetch')) {
 			return 'Network error. Please try again later.';
 		}
 		if (error.name === 'SyntaxError') {

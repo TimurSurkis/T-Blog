@@ -16,9 +16,12 @@ router.get('/getUser', (req, res, next) => {
 });
 
 router.get('/logout', (req, res, next) => {
-	if (req.user) {
-		req.user = null;
-		res.json({ success: true });
+	if (req.session.user) {
+		req.session.user = null;
+		req.session.save((err) => {
+			if (err) console.log(err);
+			res.json({ success: true });
+		});
 	} else {
 		res.status(401).json({ success: false, message: 'No user found' });
 	}
@@ -53,8 +56,11 @@ router.post('/register', async (req, res, next) => {
 			password: EncryptedPassword,
 		};
 		const newUser = await User.create(newUserData);
-		req.user = newUser;
-		res.json({ success: true, user: newUser });
+		req.session.user = newUser;
+		req.session.save((err) => {
+			if (err) console.log(err);
+			res.json({ success: true, user: newUser });
+		});
 	} catch (err) {
 		console.log(err);
 		res.status(500).json({
@@ -71,7 +77,7 @@ router.post('/login', async (req, res, next) => {
 	try {
 		const user = await User.findOne({ where: { name: username } });
 		if (!user) {
-			res.status(401).json({
+			return res.status(401).json({
 				success: false,
 				message: 'Wrong username',
 				formData: {
@@ -91,11 +97,14 @@ router.post('/login', async (req, res, next) => {
 				},
 			});
 		}
-		req.user = user;
-		console.log('USER', req.user);
-		res.json({
-			success: true,
-			user: req.user,
+		req.session.user = user;
+		console.log('USER', req.session.user);
+		req.session.save((err) => {
+			if (err) console.log(err);
+			res.json({
+				success: true,
+				user: req.session.user,
+			});
 		});
 	} catch (err) {
 		console.log(err);

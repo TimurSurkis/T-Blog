@@ -7,7 +7,9 @@ export const fetchUser = createAsyncThunk(
 	'users/getUser',
 	async (_, { rejectWithValue }) => {
 		try {
-			const response = await fetch(`${API_URL}/getUser`);
+			const response = await fetch(`${API_URL}/getUser`, {
+				credentials: 'include',
+			});
 
 			if (!response.ok) {
 				const err = await response.json();
@@ -26,7 +28,9 @@ export const logoutUser = createAsyncThunk(
 	'users/logout',
 	async (_, { rejectWithValue }) => {
 		try {
-			const response = await fetch(`${API_URL}/logout`);
+			const response = await fetch(`${API_URL}/logout`, {
+				credentials: 'include',
+			});
 			if (!response.ok) {
 				const err = await response.json();
 				return rejectWithValue(err.message || 'Loading error');
@@ -52,6 +56,7 @@ export const loginUser = createAsyncThunk(
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify(credentials),
+				credentials: 'include',
 			});
 
 			if (!response.ok) {
@@ -60,7 +65,6 @@ export const loginUser = createAsyncThunk(
 			}
 
 			const result = await response.json();
-			console.log(result);
 			return result;
 		} catch (err) {
 			return rejectWithValue(handleError(err));
@@ -78,6 +82,7 @@ export const registerUser = createAsyncThunk(
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify(credentials),
+				credentials: 'include',
 			});
 
 			if (!response.ok) {
