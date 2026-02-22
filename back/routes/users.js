@@ -1,6 +1,7 @@
 import Express from 'express';
 import User from '../models/user.js';
 import bcrypt from 'bcrypt';
+import { Op } from 'sequelize';
 
 const saltRounds = 10;
 
@@ -19,7 +20,7 @@ router.get('/logout', (req, res, next) => {
 		req.user = null;
 		res.json({ success: true });
 	} else {
-		res.json({ success: false, message: 'No user found' });
+		res.status(401).json({ success: false, message: 'No user found' });
 	}
 });
 
@@ -29,9 +30,19 @@ router.post('/register', async (req, res, next) => {
 	const password = req.body.password;
 
 	try {
-		const user = await User.findOne({ where: { name: username } });
+		const user = await User.findOne({
+			where: {
+				[Op.or]: [{ name: username }, { email }],
+			},
+		});
 		if (user) {
-			return res.json({ success: false, message: 'User already exists' });
+			return res.status(409).json({
+				success: false,
+				message:
+					user.name === username
+						? 'Username already in use'
+						: 'Email already in use',
+			});
 		}
 
 		const EncryptedPassword = await bcrypt.hash(password, saltRounds);
@@ -46,7 +57,10 @@ router.post('/register', async (req, res, next) => {
 		res.json({ success: true, user: newUser });
 	} catch (err) {
 		console.log(err);
-		res.json({ success: false, message: err });
+		res.status(500).json({
+			success: false,
+			message: 'Internal server error',
+		});
 	}
 });
 
@@ -57,13 +71,20 @@ router.post('/login', async (req, res, next) => {
 	try {
 		const user = await User.findOne({ where: { name: username } });
 		if (!user) {
-			res.json({ success: false, message: 'Wrong username!' });
+			res.status(401).json({
+				success: false,
+				message: 'Wrong username',
+				formData: {
+					username,
+					password,
+				},
+			});
 		}
 		const passwordMatch = await bcrypt.compare(password, user.password);
 		if (!passwordMatch) {
-			res.json({
+			res.status(401).json({
 				success: false,
-				message: 'Wrong password!',
+				message: 'Wrong password',
 				formData: {
 					username,
 					password: '',
@@ -78,7 +99,10 @@ router.post('/login', async (req, res, next) => {
 		});
 	} catch (err) {
 		console.log(err);
-		res.json({ success: false, error: err });
+		res.status(500).json({
+			success: false,
+			message: 'Internal server error',
+		});
 	}
 });
 

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { handleError } from '../util/errorHandler';
 
 const API_URL = 'http://localhost:3001/api/user';
 
@@ -16,7 +17,7 @@ export const fetchUser = createAsyncThunk(
 			const data = await response.json();
 			return data;
 		} catch (err) {
-			return rejectWithValue(err.message);
+			return rejectWithValue(handleError(err));
 		}
 	},
 );
@@ -36,7 +37,7 @@ export const logoutUser = createAsyncThunk(
 			}
 			return result;
 		} catch (err) {
-			return rejectWithValue(err.message);
+			return rejectWithValue(handleError(err));
 		}
 	},
 );
@@ -62,7 +63,7 @@ export const loginUser = createAsyncThunk(
 			console.log(result);
 			return result;
 		} catch (err) {
-			return rejectWithValue(err.message);
+			return rejectWithValue(handleError(err));
 		}
 	},
 );
@@ -88,7 +89,7 @@ export const registerUser = createAsyncThunk(
 			console.log(result);
 			return result;
 		} catch (err) {
-			return rejectWithValue(err.message);
+			return rejectWithValue(handleError(err));
 		}
 	},
 );
