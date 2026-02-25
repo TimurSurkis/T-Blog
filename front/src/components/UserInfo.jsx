@@ -16,12 +16,6 @@ const UserInfo = () => {
 		formattedDate = date.toLocaleDateString('ru-RU');
 	}
 
-	useEffect(() => {
-		if (!currentUser) {
-			navigate('/');
-		}
-	}, []);
-
 	return (
 		currentUser && (
 			<div className="auth-container">
@@ -40,7 +34,9 @@ const UserInfo = () => {
 
 					<div className="user-info__field">
 						<span className="user-info__label">Created</span>
-						<span className="user-info__value">{formattedDate}</span>
+						<span className="user-info__value">
+							{formattedDate}
+						</span>
 					</div>
 				</div>
 			</div>

@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AuthForms.css';
 import { useAuth } from '../hooks/useAuth';
+import { useCurrentUser } from '../hooks/useCurrentUser';
 
 const LoginForm = () => {
 	const navigate = useNavigate();
 	const auth = useAuth();
+	const currentUser = useCurrentUser();
 
 	const [formData, setFormData] = useState({
 		username: '',

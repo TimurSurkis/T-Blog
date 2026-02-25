@@ -8,8 +8,8 @@ const saltRounds = 10;
 const router = Express.Router();
 
 router.get('/getUser', (req, res, next) => {
-	if (req.user) {
-		res.json(req.user);
+	if (req.session.user) {
+		res.json(req.session.user);
 	} else {
 		res.json();
 	}
@@ -17,9 +17,9 @@ router.get('/getUser', (req, res, next) => {
 
 router.get('/logout', (req, res, next) => {
 	if (req.session.user) {
-		req.session.user = null;
-		req.session.save((err) => {
+		req.session.destroy((err) => {
 			if (err) console.log(err);
+			res.clearCookie('connect.sid');
 			res.json({ success: true });
 		});
 	} else {
