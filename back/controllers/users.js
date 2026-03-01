@@ -8,7 +8,7 @@ export const getUser = (req, res, next) => {
 	if (req.session.user) {
 		res.json(req.session.user);
 	} else {
-		res.json();
+		res.status(200).json(null);
 	}
 };
 
@@ -85,7 +85,7 @@ export const postLogin = async (req, res, next) => {
 		}
 		const passwordMatch = await bcrypt.compare(password, user.password);
 		if (!passwordMatch) {
-			res.status(401).json({
+			return res.status(401).json({
 				success: false,
 				message: 'Wrong password',
 				formData: {
@@ -95,7 +95,6 @@ export const postLogin = async (req, res, next) => {
 			});
 		}
 		req.session.user = user;
-		console.log('USER', req.session.user);
 		req.session.save((err) => {
 			if (err) console.log(err);
 			res.json({

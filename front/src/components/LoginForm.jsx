@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AuthForms.css';
 import { useAuth } from '../hooks/useAuth';
-import { useCurrentUser } from '../hooks/useCurrentUser';
+import { useError } from '../hooks/useUserError';
 
 const LoginForm = () => {
 	const navigate = useNavigate();
 	const auth = useAuth();
-	const currentUser = useCurrentUser();
+	const error = useError();
 
 	const [formData, setFormData] = useState({
 		username: '',
 		password: '',
 	});
-	const [error, setError] = useState('');
+	/* const [error, setError] = useState(''); */
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -24,12 +24,12 @@ const LoginForm = () => {
 			if (result.success) {
 				navigate('/');
 			} else {
-				setError(result.message);
+				/* setError(result.message); */
 				setFormData(result.formData);
 			}
 		} catch (err) {
 			console.error(`Login failed: ${err}`);
-			setError(err);
+			/* setError(err); */
 		}
 	};
 
@@ -76,7 +76,14 @@ const LoginForm = () => {
 					/>
 				</div>
 
-				<button type="submit" className="auth-form__button">
+				<button
+					disabled={
+						Object.values(formData).some((value) => value === '') &&
+						true
+					}
+					type="submit"
+					className="auth-form__button"
+				>
 					Login
 				</button>
 

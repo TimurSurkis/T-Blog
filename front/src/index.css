@@ -1,22 +1,37 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+	color-scheme: light dark;
+	color: rgba(255, 255, 255, 0.87);
+	background-color: #242424;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	--light-gray: #ffffffb3;
+	--dark-gray: #1f1f1f;
+	--accent: #646cff;
+	--dark-blue: #646cff1a;
+	--transparent: rgba(0, 0, 0, 0);
+	--form-border: rgba(255, 255, 255, 0.1);
+	--box-shadow: rgba(0, 0, 0, 0.4);
+	--input-bg: #2d2d2d;
+	--input-border: rgba(255, 255, 255, 0.15);
+	--input-text: rgba(255, 255, 255, 0.87);
+}
+
+* {
+	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 html {
-  font-size: 24px;
+	font-size: 24px;
 }
 
 body {
-  margin: 0;
+	margin: 0;
 }

@@ -1,10 +1,10 @@
-import { Outlet, NavLink } from 'react-router-dom';
-import { useCurrentUser } from '../hooks/useCurrentUser';
+import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { AddPostBtn } from './AddPostButton';
 
-const Menu = () => {
-	const currentUser = useCurrentUser();
+const Menu = ({ currentUser }) => {
 	const auth = useAuth();
+	const location = useLocation();
 
 	const { name } = currentUser ?? {};
 
@@ -45,6 +45,10 @@ const Menu = () => {
 
 			<main>
 				<Outlet />
+
+				{currentUser && location.pathname !== '/add-post' && (
+					<AddPostBtn />
+				)}
 			</main>
 		</>
 	);

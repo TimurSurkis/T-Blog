@@ -10,9 +10,11 @@ const MySqlStoreFactory = require('express-mysql-session');
 
 const MySqlStore = MySqlStoreFactory(session);
 
-import router from './routes/users.js';
+import userRouter from './routes/users.js';
+import postRouter from './routes/posts.js';
 
 import User from './models/user.js';
+import Post from './models/post.js';
 
 const app = Express();
 
@@ -41,8 +43,8 @@ app.use(
 		store,
 		cookie: {
 			httpOnly: true,
-			maxAge: 1000 * 60 * 60 * 24
-		}
+			maxAge: 1000 * 60 * 60 * 24,
+		},
 	}),
 );
 
@@ -57,7 +59,11 @@ app.use(async (req, res, next) => {
 	}
 });
 
-app.use('/api/user', router);
+app.use('/api/user', userRouter);
+app.use('/api/post', postRouter);
+
+Post.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+User.hasMany(Post);
 
 (async () => {
 	try {

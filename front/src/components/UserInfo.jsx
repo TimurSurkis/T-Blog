@@ -3,10 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useCurrentUser } from '../hooks/useCurrentUser';
 import './AuthForms.css';
 
-const UserInfo = () => {
+const UserInfo = ({ currentUser }) => {
 	const navigate = useNavigate();
-
-	const currentUser = useCurrentUser();
 
 	const { name, email, createdAt } = currentUser ?? {};
 

@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AuthForms.css';
 import { useAuth } from '../hooks/useAuth';
-import { useCurrentUser } from '../hooks/useCurrentUser';
+import { useError } from '../hooks/useUserError';
 
 const RegisterForm = () => {
 	const navigate = useNavigate();
 	const auth = useAuth();
-	const currentUser = useCurrentUser();
+	const error = useError();
 
 	const [password, setPassword] = useState('');
 	const [repeatPassword, setRepeatPassword] = useState('');
@@ -16,7 +16,7 @@ const RegisterForm = () => {
 		email: '',
 		password: '',
 	});
-	const [error, setError] = useState('');
+	/* const [error, setError] = useState(''); */
 
 	const handleRegister = async (e) => {
 		e.preventDefault();
@@ -26,12 +26,12 @@ const RegisterForm = () => {
 
 			if (result.success) {
 				navigate('/');
-			} else {
+			} /* else {
 				setError(result.message);
-			}
+			} */
 		} catch (err) {
 			console.log(err);
-			setError(err);
+			/* setError(err); */
 		}
 	};
 

@@ -5,49 +5,69 @@ import Menu from './components/Menu';
 import RegisterForm from './components/RegisterForm';
 import LoginForm from './components/LoginForm';
 import UserInfo from './components/UserInfo';
+import { AddPostForm } from './components/AddPostForm';
 
 import { useCurrentUser } from './hooks/useCurrentUser';
 
 function App() {
-	const currentUser = useCurrentUser();
+	const { currentUser, isLoading } = useCurrentUser();
 
-	return (
-		<BrowserRouter>
-			<Routes>
-				<Route path="/" element={<Menu />}>
+	return isLoading ? (
+		<div>
+			<h2>Loading...</h2>
+		</div>
+	) : (
+		<>
+			<BrowserRouter>
+				<Routes>
 					<Route
-						path="/user-info"
-						element={
-							currentUser ? (
-								<UserInfo />
-							) : (
-								<Navigate to="/" replace />
-							)
-						}
-					/>
-					<Route
-						path="/register"
-						element={
-							!currentUser ? (
-								<RegisterForm />
-							) : (
-								<Navigate to="/" replace />
-							)
-						}
-					/>
-					<Route
-						path="/login"
-						element={
-							!currentUser ? (
-								<LoginForm />
-							) : (
-								<Navigate to="/" replace />
-							)
-						}
-					/>
-				</Route>
-			</Routes>
-		</BrowserRouter>
+						path="/"
+						element={<Menu currentUser={currentUser} />}
+					>
+						<Route
+							path="/user-info"
+							element={
+								currentUser ? (
+									<UserInfo currentUser={currentUser} />
+								) : (
+									<Navigate to="/" replace />
+								)
+							}
+						/>
+						<Route
+							path="/register"
+							element={
+								!currentUser ? (
+									<RegisterForm currentUser={currentUser} />
+								) : (
+									<Navigate to="/" replace />
+								)
+							}
+						/>
+						<Route
+							path="/login"
+							element={
+								!currentUser ? (
+									<LoginForm currentUser={currentUser} />
+								) : (
+									<Navigate to="/" replace />
+								)
+							}
+						/>
+						<Route
+							path="/add-post"
+							element={
+								currentUser ? (
+									<AddPostForm currentUser={currentUser} />
+								) : (
+									<Navigate to="/" replace />
+								)
+							}
+						/>
+					</Route>
+				</Routes>
+			</BrowserRouter>
+		</>
 	);
 }
 

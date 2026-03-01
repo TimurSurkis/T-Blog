@@ -1,25 +1,25 @@
 import { INTEGER, STRING } from 'sequelize';
 import sequelize from '../utils/database.js';
 
-const User = sequelize.define('user', {
+const Post = sequelize.define('post', {
 	id: {
 		type: INTEGER,
 		autoIncrement: true,
 		allowNull: false,
 		primaryKey: true,
 	},
-	name: {
+	title: {
 		type: STRING,
 		allowNull: false,
 	},
-	email: {
+	text: {
 		type: STRING,
 		allowNull: false,
 	},
-	password: {
+	author: {
 		type: STRING,
-		allowNull: false,
-	},
+		allowNull: false
+	}
 });
 
-export default User;
+export default Post;
