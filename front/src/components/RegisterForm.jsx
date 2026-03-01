@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AuthForms.css';
 import { useAuth } from '../hooks/useAuth';
-import { useError } from '../hooks/useUserError';
+import { useUserError } from '../hooks/useUserError';
 
 const RegisterForm = () => {
 	const navigate = useNavigate();
 	const auth = useAuth();
-	const error = useError();
+	const error = useUserError();
 
 	const [password, setPassword] = useState('');
 	const [repeatPassword, setRepeatPassword] = useState('');
@@ -30,7 +30,7 @@ const RegisterForm = () => {
 				setError(result.message);
 			} */
 		} catch (err) {
-			console.log(err);
+			return console.log(err);
 			/* setError(err); */
 		}
 	};

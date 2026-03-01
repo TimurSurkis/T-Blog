@@ -188,7 +188,7 @@ const usersSlice = createSlice({
 export const { clearError } = usersSlice.actions;
 
 export const selectCurrentUser = (state) => state.users.currentUser;
-export const selectLoading = (state) => state.users.loading.fetchOne;
-export const selectError = (state) => state.users.error;
+export const selectUserLoading = (state) => state.users.loading.fetchOne;
+export const selectUserError = (state) => state.users.error;
 
 export default usersSlice.reducer;

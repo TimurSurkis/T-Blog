@@ -3,11 +3,13 @@ import { createPost } from '../store/slices/postSlice';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AuthForms.css';
+import usePostError from '../hooks/usePostError';
 
 import FroalaEditor from 'react-froala-wysiwyg';
 
 export const AddPostForm = ({ currentUser }) => {
 	const navigate = useNavigate();
+	const postError = usePostError();
 
 	const [postData, setPostData] = useState({
 		postTitle: '',
@@ -20,10 +22,14 @@ export const AddPostForm = ({ currentUser }) => {
 		e.preventDefault();
 		console.log('POST DATA', postData);
 
-		const result = await dispatch(createPost(postData)).unwrap();
+		try {
+			const result = await dispatch(createPost(postData)).unwrap();
 
-		if (result.success) {
-			navigate('/');
+			if (result.success) {
+				navigate('/');
+			}
+		} catch (err) {
+			return console.log(err);
 		}
 	};
 
@@ -89,6 +95,8 @@ export const AddPostForm = ({ currentUser }) => {
 					name="postAuthor"
 					value={currentUser.name}
 				/>
+
+				{postError}
 
 				<button type="submit" className="auth-form__button">
 					Create Post

@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
-import { selectError } from '../store/slices/userSlice';
+import { selectUserError } from '../store/slices/userSlice';
 
-export const useError = () => {
-	const error = useSelector(selectError);
+export const useUserError = () => {
+	const error = useSelector(selectUserError);
 
 	return error;
 };

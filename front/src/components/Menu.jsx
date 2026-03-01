@@ -1,6 +1,5 @@
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { AddPostBtn } from './AddPostButton';
 
 const Menu = ({ currentUser }) => {
 	const auth = useAuth();
@@ -45,10 +44,6 @@ const Menu = ({ currentUser }) => {
 
 			<main>
 				<Outlet />
-
-				{currentUser && location.pathname !== '/add-post' && (
-					<AddPostBtn />
-				)}
 			</main>
 		</>
 	);

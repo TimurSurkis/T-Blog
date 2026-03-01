@@ -5,12 +5,16 @@ import Menu from './components/Menu';
 import RegisterForm from './components/RegisterForm';
 import LoginForm from './components/LoginForm';
 import UserInfo from './components/UserInfo';
+import AddPostBtn from './components/AddPostButton';
+import PostsContainer from './components/PostsContainer';
 import { AddPostForm } from './components/AddPostForm';
 
-import { useCurrentUser } from './hooks/useCurrentUser';
+import useCurrentUser from './hooks/useCurrentUser';
+import usePosts from './hooks/usePosts';
 
 function App() {
 	const { currentUser, isLoading } = useCurrentUser();
+	const posts = usePosts();
 
 	return isLoading ? (
 		<div>
@@ -24,6 +28,15 @@ function App() {
 						path="/"
 						element={<Menu currentUser={currentUser} />}
 					>
+						<Route
+							path="/"
+							element={
+								<>
+									<AddPostBtn />
+									<PostsContainer posts={posts} />
+								</>
+							}
+						/>
 						<Route
 							path="/user-info"
 							element={

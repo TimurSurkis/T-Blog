@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentUser, selectLoading } from '../store/slices/userSlice';
+import { selectCurrentUser, selectUserLoading } from '../store/slices/userSlice';
 import { fetchUser } from '../store/slices/userSlice';
 
-export function useCurrentUser() {
+function useCurrentUser() {
 	const dispatch = useDispatch();
 	const currentUser = useSelector(selectCurrentUser);
-	const isLoading = useSelector(selectLoading);
+	const isLoading = useSelector(selectUserLoading);
 
 	useEffect(() => {
 		dispatch(fetchUser());
@@ -14,3 +14,5 @@ export function useCurrentUser() {
 
 	return { currentUser, isLoading };
 }
+
+export default useCurrentUser;

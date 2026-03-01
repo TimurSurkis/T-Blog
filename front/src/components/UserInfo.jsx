@@ -1,11 +1,6 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useCurrentUser } from '../hooks/useCurrentUser';
 import './AuthForms.css';
 
 const UserInfo = ({ currentUser }) => {
-	const navigate = useNavigate();
-
 	const { name, email, createdAt } = currentUser ?? {};
 
 	let formattedDate;
