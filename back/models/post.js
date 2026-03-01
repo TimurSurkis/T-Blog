@@ -1,4 +1,4 @@
-import { INTEGER, STRING } from 'sequelize';
+import { INTEGER, STRING, TEXT } from 'sequelize';
 import sequelize from '../utils/database.js';
 
 const Post = sequelize.define('post', {
@@ -13,7 +13,7 @@ const Post = sequelize.define('post', {
 		allowNull: false,
 	},
 	text: {
-		type: STRING,
+		type: TEXT,
 		allowNull: false,
 	},
 	author: {

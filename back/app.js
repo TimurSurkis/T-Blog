@@ -67,7 +67,7 @@ User.hasMany(Post);
 
 (async () => {
 	try {
-		await sequelize.sync();
+		await sequelize.sync({ force: true });
 
 		const PORT = 3001;
 		app.listen(PORT, 'localhost', () => {

@@ -83,7 +83,6 @@ const postsSlice = createSlice({
 			})
 
 			// Fetch Posts
-
 			.addCase(fetchPosts.pending, (state) => {
 				state.loading.fetchAll = true;
 			})

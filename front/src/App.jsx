@@ -32,7 +32,7 @@ function App() {
 							path="/"
 							element={
 								<>
-									<AddPostBtn />
+									{currentUser && <AddPostBtn />}
 									<PostsContainer posts={posts} />
 								</>
 							}
