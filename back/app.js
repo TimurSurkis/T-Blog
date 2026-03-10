@@ -15,6 +15,7 @@ import postRouter from './routes/posts.js';
 
 import User from './models/user.js';
 import Post from './models/post.js';
+import Reaction from './models/reaction.js';
 
 const app = Express();
 
@@ -64,6 +65,10 @@ app.use('/api/post', postRouter);
 
 Post.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Post);
+Reaction.belongsTo(User);
+Reaction.belongsTo(Post, { onDelete: 'CASCADE' });
+User.hasMany(Reaction);
+Post.hasMany(Reaction);
 
 (async () => {
 	try {

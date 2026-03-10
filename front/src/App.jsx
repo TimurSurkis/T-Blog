@@ -33,7 +33,10 @@ function App() {
 							element={
 								<>
 									{currentUser && <AddPostBtn />}
-									<PostsContainer posts={posts} />
+									<PostsContainer
+										posts={posts}
+										currentUser={currentUser}
+									/>
 								</>
 							}
 						/>

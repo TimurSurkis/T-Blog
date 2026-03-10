@@ -71,12 +71,14 @@ export const postLogin = async (req, res, next) => {
 	const username = req.body.username;
 	const password = req.body.password;
 
+	const wrongMessage = 'Wrong username or password';
+
 	try {
 		const user = await User.findOne({ where: { name: username } });
 		if (!user) {
 			return res.status(401).json({
 				success: false,
-				message: 'Wrong username',
+				message: wrongMessage,
 				formData: {
 					username,
 					password,
@@ -87,10 +89,10 @@ export const postLogin = async (req, res, next) => {
 		if (!passwordMatch) {
 			return res.status(401).json({
 				success: false,
-				message: 'Wrong password',
+				message: wrongMessage,
 				formData: {
 					username,
-					password: '',
+					password,
 				},
 			});
 		}

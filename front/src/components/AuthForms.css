@@ -332,3 +332,25 @@
 		margin-bottom: 1rem;
 	}
 }
+
+.post-card__content_margin {
+	margin-bottom: .6rem;
+}
+
+.post-card__actions {
+	display: flex;
+	gap: .6rem;
+}
+
+.reaction-btn {
+	line-height: 0;
+	border: none;
+	border-radius: .2rem;
+	background-color: rgba(0, 0, 0, 0);
+	font-size: 1.2rem;
+	padding: .2rem;
+}
+.reaction-btn:hover {
+	cursor: pointer;
+	background-color: rgba(58, 58, 58);
+}

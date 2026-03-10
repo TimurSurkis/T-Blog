@@ -1,12 +1,32 @@
 import Post from '../models/post.js';
+import Reaction from '../models/reaction.js';
 
 export const fetchPosts = async (req, res, next) => {
 	try {
 		const posts = await Post.findAll();
-		console.log('Fetched posts: ', posts);
-		res.json({ success: true, posts });
+		res.json({ success: true, data: posts });
 	} catch (err) {
 		res.status(500).json({
+			success: false,
+			message: 'Internal server error',
+		});
+	}
+};
+
+export const fetchPostReactions = async (req, res, next) => {
+	const postId = req.params.postId;
+
+	try {
+		const post = await Post.findByPk(postId);
+		const postReactions = await post.getReactions();
+
+		return res.json({
+			success: true,
+			data: { postReactions, postId: postId },
+		});
+	} catch (err) {
+		console.error(err);
+		return res.status(500).json({
 			success: false,
 			message: 'Internal server error',
 		});
@@ -23,10 +43,13 @@ export const createPost = async (req, res, next) => {
 			title,
 			text,
 			author,
+			createdAt: Date.now(),
+			hearts: 0,
+			dislikes: 0,
 		};
 		try {
 			await req.user.createPost(postData);
-			res.json({ success: true, post: postData });
+			res.json({ success: true, data: postData });
 		} catch (err) {
 			res.status(500).json({
 				success: false,
@@ -35,5 +58,73 @@ export const createPost = async (req, res, next) => {
 		}
 	} else {
 		res.status(401).json({ success: false, message: 'User unauthorized' });
+	}
+};
+
+export const setReaction = async (req, res, next) => {
+	const reactionType = req.params.reactionType;
+	const postId = Number(req.params.postId);
+	const userId = req.user.id;
+
+	const post = await Post.findOne({ where: { id: postId } });
+
+	const reaction = await Reaction.findOne({
+		where: {
+			postId,
+			userId,
+		},
+	});
+	if (reaction) {
+		const newReaction = await reaction.destroy();
+		console.log(reaction);
+		if (reaction.reactionType === reactionType) {
+			const oldReactionQty = post[`${reactionType}s`];
+			await post.update({
+				[`${reactionType}s`]: oldReactionQty - 1,
+			});
+
+			const reactions = await post.getReactions();
+			return res.json({
+				success: true,
+				data: {
+					postId,
+					reactions,
+					hearts: post.hearts,
+					dislikes: post.dislikes,
+				},
+			});
+		}
+	}
+
+	try {
+		await post.createReaction({
+			postId,
+			userId,
+			reactionType,
+		});
+		const postReactions = await post.getReactions();
+		const postHearts = postReactions.filter(
+			(reaction) => reaction.reactionType == 'heart',
+		);
+		const postDislikes = postReactions.filter(
+			(reaction) => reaction.reactionType == 'dislike',
+		);
+		await post.update({
+			hearts: postHearts.length,
+			dislikes: postDislikes.length,
+		});
+
+		const reactions = await post.getReactions();
+		res.json({
+			success: true,
+			data: {
+				postId,
+				hearts: postHearts.length,
+				dislikes: postDislikes.length,
+				reactions
+			},
+		});
+	} catch (err) {
+		console.error(err);
 	}
 };

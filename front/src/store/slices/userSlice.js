@@ -91,7 +91,6 @@ export const registerUser = createAsyncThunk(
 			}
 
 			const result = await response.json();
-			console.log(result);
 			return result;
 		} catch (err) {
 			return rejectWithValue(handleError(err));

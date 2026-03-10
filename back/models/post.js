@@ -18,8 +18,16 @@ const Post = sequelize.define('post', {
 	},
 	author: {
 		type: STRING,
-		allowNull: false
-	}
+		allowNull: false,
+	},
+	hearts: {
+		type: INTEGER,
+		defaultValue: 0,
+	},
+	dislikes: {
+		type: INTEGER,
+		defaultValue: 0,
+	},
 });
 
 export default Post;
