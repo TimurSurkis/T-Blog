@@ -63,16 +63,15 @@ const PostCard = ({ post, currentUser }) => {
 						onClick={() => handleSetReaction('dislike')}
 					>
 						{postReactions.length > 0 ? (
-							postReactions.map((reaction) => {
-								if (
+							postReactions.find(
+								(reaction) =>
 									reaction.reactionType === 'dislike' &&
-									reaction.userId === currentUser.id
-								) {
-									return <AiFillDislike />;
-								} else {
-									return <AiOutlineDislike />;
-								}
-							})
+									reaction.userId === currentUser.id,
+							) ? (
+								<AiFillDislike />
+							) : (
+								<AiOutlineDislike />
+							)
 						) : (
 							<AiOutlineDislike />
 						)}
