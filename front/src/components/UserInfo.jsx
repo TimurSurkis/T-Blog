@@ -1,38 +1,49 @@
+import { Navigate, NavLink, Outlet, useLocation } from 'react-router-dom';
 import './AuthForms.css';
+import formatDate from '../store/util/formatDate';
 
 const UserInfo = ({ currentUser }) => {
+	const { pathname } = useLocation();
 	const { name, email, createdAt } = currentUser ?? {};
 
 	let formattedDate;
 	if (createdAt) {
-		const date = new Date(createdAt);
-		formattedDate = date.toLocaleDateString('ru-RU');
+		formattedDate = formatDate(createdAt);
 	}
+	const outletContext = { name, email, date: formattedDate };
 
 	return (
 		currentUser && (
-			<div className="auth-container">
+			<>
+				{pathname === '/user-info' && (
+					<Navigate to="/user-info/profile" />
+				)}
 				<div className="user-info">
-					<h2 className="user-info__title">Profile</h2>
-
-					<div className="user-info__field">
-						<span className="user-info__label">Name</span>
-						<span className="user-info__value">{name}</span>
+					<div className="sidebar">
+						<ul className="account-infos">
+							<li className="account-info">
+								<NavLink
+									to="/user-info/profile"
+									className="account-info__btn"
+								>
+									Profile
+								</NavLink>
+							</li>
+							<li className="account-info">
+								<NavLink
+									to="/user-info/posts"
+									className="account-info__btn"
+								>
+									Posts
+								</NavLink>
+							</li>
+						</ul>
 					</div>
-
-					<div className="user-info__field">
-						<span className="user-info__label">Email</span>
-						<span className="user-info__value">{email}</span>
-					</div>
-
-					<div className="user-info__field">
-						<span className="user-info__label">Created</span>
-						<span className="user-info__value">
-							{formattedDate}
-						</span>
+					<div className="auth-container">
+						<Outlet context={outletContext} />
 					</div>
 				</div>
-			</div>
+			</>
 		)
 	);
 };

@@ -147,7 +147,6 @@ const postsSlice = createSlice({
 			.addCase(fetchPostReactions.fulfilled, (state, action) => {
 				state.loading.fetchOne = false;
 				postsSlice.caseReducers.clearError(state);
-				console.log(action.payload.data.postReactions);
 				state.reactions = {
 					...state.reactions,
 					[action.payload.data.postId]:
@@ -164,7 +163,7 @@ const postsSlice = createSlice({
 				state.loading.setReaction = true;
 			})
 			.addCase(setReaction.fulfilled, (state, action) => {
-				state.loading.create = false;
+				state.loading.setReaction = false;
 				postsSlice.caseReducers.clearError(state);
 				const post = state.items.find((item) => {
 					return item.id === action.payload.data.postId;

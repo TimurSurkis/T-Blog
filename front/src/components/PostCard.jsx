@@ -10,6 +10,7 @@ import { AiFillDislike } from 'react-icons/ai';
 import { setReaction } from '../store/slices/postSlice';
 import { useDispatch } from 'react-redux';
 import usePostReactions from '../hooks/usePostReactions';
+import { NavLink } from 'react-router-dom';
 
 const PostCard = ({ post, currentUser }) => {
 	const dispatch = useDispatch();
@@ -30,7 +31,17 @@ const PostCard = ({ post, currentUser }) => {
 				className={`post-card__content ${currentUser ? 'post-card__content_margin' : ''}`}
 			>
 				<div className="post-card__meta">
-					<span className="post-card__author">{post.author}</span>
+					<NavLink className="post-card__author-link"
+						to={{
+							pathname:
+								currentUser && currentUser.id === post.userId
+									? '/user-info'
+									: '/user-profile',
+							search: `?userId=${post.userId}`,
+						}}
+					>
+						<span className="post-card__author">{post.author}</span>
+					</NavLink>
 					<span className="post-card__date">{formattedDate}</span>
 				</div>
 				<h2 className="post-card__title">{post.title}</h2>

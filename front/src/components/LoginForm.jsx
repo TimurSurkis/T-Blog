@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './AuthForms.css';
 import { useAuth } from '../hooks/useAuth';
 import { useUserError } from '../hooks/useUserError';
+import { Link } from 'react-router-dom';
 
 const LoginForm = () => {
 	const navigate = useNavigate();
@@ -74,6 +75,12 @@ const LoginForm = () => {
 							})
 						}
 					/>
+					<Link
+						className="reset-password-form-link"
+						to="/reset-password-form"
+					>
+						Forgot password?
+					</Link>
 				</div>
 
 				<button

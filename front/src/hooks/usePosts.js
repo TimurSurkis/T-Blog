@@ -7,7 +7,7 @@ import {
 	selectPosts,
 } from '../store/slices/postSlice';
 
-const usePosts = (postId) => {
+const usePosts = () => {
 	const dispatch = useDispatch();
 	const posts = useSelector(selectPosts);
 

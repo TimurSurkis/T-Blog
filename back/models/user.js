@@ -1,4 +1,4 @@
-import { INTEGER, STRING } from 'sequelize';
+import { DATE, INTEGER, STRING } from 'sequelize';
 import sequelize from '../utils/database.js';
 
 const User = sequelize.define('user', {
@@ -19,6 +19,14 @@ const User = sequelize.define('user', {
 	password: {
 		type: STRING,
 		allowNull: false,
+	},
+	resetToken: {
+		type: STRING,
+		defaultValue: null,
+	},
+	resetTokenExpiration: {
+		type: DATE,
+		defaultValue: null,
 	},
 });
 

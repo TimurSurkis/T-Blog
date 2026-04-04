@@ -11,7 +11,7 @@ const usePostReactions = (postId) => {
 
 	useEffect(() => {
 		dispatch(fetchPostReactions({ postId }));
-	}, []);
+	}, [dispatch, postId]);
 
 	return postReactions[`${postId}`] ?? [];
 };

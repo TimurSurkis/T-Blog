@@ -3,6 +3,7 @@ import {
 	createPost,
 	fetchPostReactions,
 	fetchPosts,
+	fetchUserPosts,
 	setReaction,
 } from '../controllers/posts.js';
 
@@ -12,8 +13,11 @@ router.post('/createPost', createPost);
 
 router.get('/fetchPosts', fetchPosts);
 
+router.post('/fetchUserPosts', fetchUserPosts);
+
 router.get('/setReaction/:reactionType&:postId', setReaction);
 
 router.get('/fetchPostReactions/:postId', fetchPostReactions);
+
 
 export default router;

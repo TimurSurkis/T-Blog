@@ -13,6 +13,20 @@ export const fetchPosts = async (req, res, next) => {
 	}
 };
 
+export const fetchUserPosts = async (req, res, next) => {
+	const userId = req.body.userId;
+
+	try {
+		const userPosts = await Post.findAll({ where: { userId } });
+		res.json({ success: true, data: userPosts });
+	} catch (err) {
+		res.status(500).json({
+			success: false,
+			message: 'Internal server error',
+		});
+	}
+};
+
 export const fetchPostReactions = async (req, res, next) => {
 	const postId = req.params.postId;
 
@@ -121,7 +135,7 @@ export const setReaction = async (req, res, next) => {
 				postId,
 				hearts: postHearts.length,
 				dislikes: postDislikes.length,
-				reactions
+				reactions,
 			},
 		});
 	} catch (err) {
