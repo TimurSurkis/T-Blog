@@ -7,7 +7,6 @@
 	padding: 2rem 0.8rem;
 }
 
-
 .auth-form {
 	background-color: var(--dark-gray);
 	border: 0.042rem solid var(--form-border);
@@ -191,7 +190,9 @@
 	font-weight: 500;
 	color: var(--light-gray);
 	text-decoration: none;
-	transition: color 0.2s, background-color 0.2s;
+	transition:
+		color 0.2s,
+		background-color 0.2s;
 }
 
 .account-info__btn:hover {
@@ -348,7 +349,7 @@
 }
 
 .post-card:not(:last-child) {
-	border-bottom: .05rem solid rgba(255, 255, 255, 0.08);
+	border-bottom: 0.05rem solid rgba(255, 255, 255, 0.08);
 }
 
 .post-card__meta {
@@ -367,8 +368,8 @@
 }
 
 .post-card__author-link {
-	padding: 0 .4rem;
-	border-radius: .4rem;
+	padding: 0 0.4rem;
+	border-radius: 0.4rem;
 	line-height: 90%;
 	text-decoration: none;
 }
@@ -417,7 +418,7 @@
 }
 
 .reset-password-form-link {
-	font-size: .8rem;
+	font-size: 0.8rem;
 	align-self: end;
 }
 
@@ -441,7 +442,13 @@
 	gap: 0.6rem;
 }
 
-.reaction-btn {
+.post-card__reactions {
+	display: flex;
+	gap: 0.6rem;
+	margin-right: 1rem;
+}
+
+.action-btn {
 	line-height: 0;
 	border: none;
 	border-radius: 0.2rem;
@@ -449,7 +456,7 @@
 	font-size: 1.2rem;
 	padding: 0.2rem;
 }
-.reaction-btn:hover {
+.action-btn:hover {
 	cursor: pointer;
 	background-color: rgba(58, 58, 58);
 }
@@ -548,4 +555,24 @@
 
 .user-profile .posts-container {
 	padding: 0;
+}
+
+.comment-card {
+	display: flex;
+	flex-direction: column;
+	padding-bottom: .6rem;
+}
+.comment-card:not(:last-child) {
+	border-bottom: 0.05rem solid rgba(255, 255, 255, 0.08);
+}
+
+.comment-header {
+	display: flex;
+	gap: 0.3rem;
+	align-items: baseline;
+}
+
+.comment-header__author {
+	font-size: 0.7rem;
+	color: var(--accent);
 }

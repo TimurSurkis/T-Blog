@@ -12,15 +12,16 @@ import UserPosts from './components/UserPosts';
 import { AddPostForm } from './components/AddPostForm';
 
 import useCurrentUser from './hooks/useCurrentUser';
-import usePosts from './hooks/usePosts';
 import UserProfile from './components/UserProfile';
 import ResetForm from './components/ResetForm';
 import ResetPassword from './components/ResetPassword';
 import CheckEmail from './components/CheckEmail';
+import usePosts from './hooks/usePosts';
+import OnePost from './components/OnePost';
 
 function App() {
 	const { currentUser, isLoading } = useCurrentUser();
-	const posts = usePosts();
+	const { posts, sentinelRef } = usePosts();
 
 	return isLoading ? (
 		<div className="loading-screen">
@@ -41,8 +42,20 @@ function App() {
 											posts={posts}
 											currentUser={currentUser}
 										/>
+										<div ref={sentinelRef} />
 									</div>
 								</>
+							}
+						/>
+						<Route
+							path="onePost/:postId"
+							element={
+								<div className="auth-container">
+									<OnePost
+										posts={posts}
+										currentUser={currentUser}
+									/>
+								</div>
 							}
 						/>
 						<Route
@@ -102,7 +115,7 @@ function App() {
 							}
 						/>
 						<Route
-							path="/user-profile"
+							path="/user-profile/:userId"
 							element={
 								<UserProfile
 									posts={posts}

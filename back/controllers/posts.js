@@ -1,25 +1,27 @@
+import { Op } from 'sequelize';
 import Post from '../models/post.js';
 import Reaction from '../models/reaction.js';
+import User from '../models/user.js';
 
 export const fetchPosts = async (req, res, next) => {
+	const cursor = req.query.cursor ? parseInt(req.query.cursor) : null;
+	const limit = 20;
+
 	try {
-		const posts = await Post.findAll();
-		res.json({ success: true, data: posts });
-	} catch (err) {
-		res.status(500).json({
-			success: false,
-			message: 'Internal server error',
+		const posts = await Post.findAll({
+			order: [['id', 'DESC']],
+			limit: limit + 1,
+			where: {
+				...(cursor && { id: { [Op.lt]: cursor } }),
+			},
 		});
-	}
-};
 
-export const fetchUserPosts = async (req, res, next) => {
-	const userId = req.body.userId;
-
-	try {
-		const userPosts = await Post.findAll({ where: { userId } });
-		res.json({ success: true, data: userPosts });
+		const hasMore = posts.length > limit;
+		const data = hasMore ? posts.slice(0, limit) : posts;
+		const nextCursor = posts[posts.length - 1];
+		res.json({ success: true, data, hasMore, nextCursor });
 	} catch (err) {
+		console.log(err);
 		res.status(500).json({
 			success: false,
 			message: 'Internal server error',
@@ -40,6 +42,36 @@ export const fetchPostReactions = async (req, res, next) => {
 		});
 	} catch (err) {
 		console.error(err);
+		return res.status(500).json({
+			success: false,
+			message: 'Internal server error',
+		});
+	}
+};
+
+export const fetchPostComments = async (req, res, next) => {
+	const postId = req.params.postId;
+	const limit = 20;
+	const cursor = req.query.cursor ? parseInt(req.query.cursor) : null;
+
+	try {
+		const post = await Post.findByPk(postId);
+		const comments = await post.getPostComments({
+			include: [{ model: User, attributes: ['id', 'name'] }],
+			order: [['id', 'DESC']],
+			limit: limit + 1,
+			where: {
+				...(cursor && { id: { [Op.lt]: cursor } }),
+			},
+		});
+
+		const hasMore = comments.length > limit;
+		const data = hasMore ? comments.slice(0, limit) : comments;
+		const nextCursor = hasMore ? data[data.length - 1] : null;
+
+		return res.json({ success: true, data, nextCursor, hasMore });
+	} catch (err) {
+		console.log(err);
 		return res.status(500).json({
 			success: false,
 			message: 'Internal server error',

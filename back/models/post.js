@@ -28,6 +28,10 @@ const Post = sequelize.define('post', {
 		type: INTEGER,
 		defaultValue: 0,
 	},
+	comments: {
+		type: INTEGER,
+		defaultValue: 0,
+	},
 });
 
 export default Post;

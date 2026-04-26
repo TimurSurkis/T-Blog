@@ -5,12 +5,14 @@ const API_URL = 'http://localhost:3001/api/post';
 
 export const fetchPosts = createAsyncThunk(
 	'posts/fetchPosts',
-	async (_, { rejectWithValue }) => {
+	async ({ cursor }, { rejectWithValue }) => {
 		try {
-			const response = await fetch(`${API_URL}/fetchPosts`);
+			const response = await fetch(
+				`${API_URL}/fetchPosts?cursor=${cursor}`,
+			);
 
 			const result = await response.json();
-			return result.data;
+			return result;
 		} catch (err) {
 			return rejectWithValue(handleError(err));
 		}
@@ -29,6 +31,23 @@ export const fetchPostReactions = createAsyncThunk(
 			const result = await response.json();
 			return result;
 		} catch (err) {
+			return rejectWithValue(handleError(err));
+		}
+	},
+);
+
+export const fetchPostComments = createAsyncThunk(
+	'posts/fetchPostComments',
+	async ({ postId, cursor }, { rejectWithValue }) => {
+		try {
+			const response = await fetch(
+				`${API_URL}/fetchPostComments/${postId}/comments?cursor=${cursor}`,
+			);
+
+			const result = await response.json();
+			return result;
+		} catch (err) {
+			console.log(err);
 			return rejectWithValue(handleError(err));
 		}
 	},
@@ -91,12 +110,20 @@ export const setReaction = createAsyncThunk(
 const initialState = {
 	items: [],
 	reactions: {},
+	comments: [],
 	loading: {
 		fetchAll: true,
 		fetchOne: true,
 		create: false,
 		setReaction: false,
 	},
+
+	nextPostsCursor: null,
+	hasMorePosts: true,
+
+	commentsStatus: 'idle',
+	nextCommentsCursor: null,
+	hasMoreComments: true,
 	error: null,
 };
 
@@ -106,6 +133,13 @@ const postsSlice = createSlice({
 
 	reducers: {
 		clearError: (state) => {
+			state.error = null;
+		},
+		resetComments: (state) => {
+			state.comments = [];
+			state.commentsStatus = 'idle';
+			state.nextCommentsCursor = null;
+			state.hasMoreComments = true;
 			state.error = null;
 		},
 	},
@@ -131,9 +165,16 @@ const postsSlice = createSlice({
 				state.loading.fetchAll = true;
 			})
 			.addCase(fetchPosts.fulfilled, (state, action) => {
+				const { data, hasMore, nextCursor } = action.payload;
+
+				const isFirstPage = action.meta.arg.cursor === null;
+
+				state.items = isFirstPage ? data : [...state.items, ...data];
+				state.hasMorePosts = hasMore;
+				state.nextPostsCursor = nextCursor;
 				state.loading.fetchAll = false;
+
 				postsSlice.caseReducers.clearError(state);
-				state.items = action.payload;
 			})
 			.addCase(fetchPosts.rejected, (state, action) => {
 				state.loading.fetchAll = false;
@@ -155,6 +196,26 @@ const postsSlice = createSlice({
 			})
 			.addCase(fetchPostReactions.rejected, (state, action) => {
 				state.loading.fetchOne = false;
+				state.error = action.payload;
+			})
+
+			// Fetch Post Comments
+			.addCase(fetchPostComments.pending, (state) => {
+				state.commentsStatus = 'loading';
+			})
+			.addCase(fetchPostComments.fulfilled, (state, action) => {
+				const { data, nextCursor, hasMore } = action.payload;
+
+				const isFirstPage = action.meta.arg.cursor === null;
+				state.comments = isFirstPage
+					? data
+					: [...state.comments, ...data];
+				state.nextCommentsCursor = nextCursor;
+				state.hasMoreComments = hasMore;
+				state.commentsStatus = 'succeeded';
+			})
+			.addCase(fetchPostComments.rejected, (state, action) => {
+				state.commentsStatus = 'error';
 				state.error = action.payload;
 			})
 
@@ -186,3 +247,4 @@ export default postsSlice.reducer;
 export const selectPostError = (state) => state.posts.error;
 export const selectPosts = (state) => state.posts.items;
 export const selectPostReactions = (state) => state.posts.reactions;
+export const { resetComments } = postsSlice.actions;

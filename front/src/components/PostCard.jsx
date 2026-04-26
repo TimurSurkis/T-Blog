@@ -6,11 +6,14 @@ import { AiOutlineHeart } from 'react-icons/ai';
 import { AiFillHeart } from 'react-icons/ai';
 import { AiOutlineDislike } from 'react-icons/ai';
 import { AiFillDislike } from 'react-icons/ai';
+import { AiOutlineComment } from 'react-icons/ai';
 
 import { setReaction } from '../store/slices/postSlice';
 import { useDispatch } from 'react-redux';
 import usePostReactions from '../hooks/usePostReactions';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import Comments from './PostComments';
+import { useState } from 'react';
 
 const PostCard = ({ post, currentUser }) => {
 	const dispatch = useDispatch();
@@ -31,13 +34,13 @@ const PostCard = ({ post, currentUser }) => {
 				className={`post-card__content ${currentUser ? 'post-card__content_margin' : ''}`}
 			>
 				<div className="post-card__meta">
-					<NavLink className="post-card__author-link"
+					<NavLink
+						className="post-card__author-link"
 						to={{
 							pathname:
 								currentUser && currentUser.id === post.userId
 									? '/user-info'
-									: '/user-profile',
-							search: `?userId=${post.userId}`,
+									: `/user-profile/${post.userId}`,
 						}}
 					>
 						<span className="post-card__author">{post.author}</span>
@@ -49,46 +52,56 @@ const PostCard = ({ post, currentUser }) => {
 			</div>
 
 			{currentUser && (
-				<div className="post-card__actions">
-					<button
-						className="reaction-btn"
-						onClick={() => handleSetReaction('heart')}
-					>
-						{postReactions.length > 0 ? (
-							postReactions.find(
-								(reaction) =>
-									reaction.reactionType === 'heart' &&
-									reaction.userId === currentUser.id,
-							) ? (
-								<AiFillHeart />
-							) : (
-								<AiOutlineHeart />
-							)
-						) : (
-							<AiOutlineHeart />
-						)}
-					</button>
-					<p>{post.hearts}</p>
-					<button
-						className="reaction-btn"
-						onClick={() => handleSetReaction('dislike')}
-					>
-						{postReactions.length > 0 ? (
-							postReactions.find(
-								(reaction) =>
-									reaction.reactionType === 'dislike' &&
-									reaction.userId === currentUser.id,
-							) ? (
-								<AiFillDislike />
-							) : (
-								<AiOutlineDislike />
-							)
-						) : (
-							<AiOutlineDislike />
-						)}
-					</button>
-					<p>{post.dislikes}</p>
-				</div>
+				<>
+					<div className="post-card__actions">
+						<div className="post-card__reactions">
+							<button
+								className="action-btn"
+								onClick={() => handleSetReaction('heart')}
+							>
+								{postReactions.length > 0 ? (
+									postReactions.find(
+										(reaction) =>
+											reaction.reactionType === 'heart' &&
+											reaction.userId === currentUser.id,
+									) ? (
+										<AiFillHeart />
+									) : (
+										<AiOutlineHeart />
+									)
+								) : (
+									<AiOutlineHeart />
+								)}
+							</button>
+							<p>{post.hearts}</p>
+							<button
+								className="action-btn"
+								onClick={() => handleSetReaction('dislike')}
+							>
+								{postReactions.length > 0 ? (
+									postReactions.find(
+										(reaction) =>
+											reaction.reactionType ===
+												'dislike' &&
+											reaction.userId === currentUser.id,
+									) ? (
+										<AiFillDislike />
+									) : (
+										<AiOutlineDislike />
+									)
+								) : (
+									<AiOutlineDislike />
+								)}
+							</button>
+							<p>{post.dislikes}</p>
+						</div>
+
+						<Link className="action-btn" to={`/onePost/${post.id}`}>
+							<AiOutlineComment />
+						</Link>
+						<p>{post.comments}</p>
+					</div>
+				</>
 			)}
 		</div>
 	);
